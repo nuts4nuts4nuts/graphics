@@ -22,6 +22,9 @@ namespace Batgai.Input
 
         bool backPressed = false;
         bool actionPressed = false;
+        bool actionReleased = false;
+        int actionFramesHeld = 0;
+
         bool upPressed = false;
         bool leftPressed = false;
         bool downPressed = false;
@@ -32,11 +35,15 @@ namespace Batgai.Input
 
         //Delegates
         public delegate void buttonPressDelegate();
+        public delegate void buttonHeldDelegate(int framesHeld);
         public delegate void directionBoolDelegate(bool[] directionArray);
         public delegate void directionPressDelegate(Vector2 value);
 
         //Events
         public event buttonPressDelegate event_actionPressed;
+        public event buttonHeldDelegate event_actionHeld;
+        public event buttonPressDelegate event_actionReleased;
+
         public event buttonPressDelegate event_backPressed;
         public event directionBoolDelegate event_directionBoolPressed;
 
@@ -54,6 +61,7 @@ namespace Batgai.Input
         {
             backPressed = false;
             actionPressed = false;
+            actionReleased = false;
             isDirectionArrayEmpty = true;
 
             for (int i = 0; i < 4; i++)
@@ -98,6 +106,20 @@ namespace Batgai.Input
                 }
             }
 
+            if (actionFramesHeld > 0 && Keyboard.GetState().IsKeyUp(Keys.Space) && GamePad.GetState(playerIndex).IsButtonUp(Buttons.A))
+            {
+                actionReleased = true;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || GamePad.GetState(playerIndex).IsButtonDown(Buttons.A)) //sad but necessary
+            {
+                actionFramesHeld++;
+            }
+            else
+            {
+                actionFramesHeld = 0;
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 directionPressed.Y = -movementSpeed;
@@ -134,31 +156,37 @@ namespace Batgai.Input
                     actionPressed = true;
                 }
 
-                if (GamePad.GetState(playerIndex).ThumbSticks.Left.Y < 0)
+                if (GamePad.GetState(playerIndex).DPad.Up == ButtonState.Pressed)
                 {
                     directionBoolArray[0] = true;
                     isDirectionArrayEmpty = false;
                 }
-                if (GamePad.GetState(playerIndex).ThumbSticks.Left.X < 0)
+                if (GamePad.GetState(playerIndex).DPad.Left == ButtonState.Pressed)
                 {
                     directionBoolArray[1] = true;
                     isDirectionArrayEmpty = false;
                 }
-                if (GamePad.GetState(playerIndex).ThumbSticks.Left.Y > 0)
+                if (GamePad.GetState(playerIndex).DPad.Down == ButtonState.Pressed)
                 {
                     directionBoolArray[2] = true;
                     isDirectionArrayEmpty = false;
                 }
-                if (GamePad.GetState(playerIndex).ThumbSticks.Left.X > 0)
+                if (GamePad.GetState(playerIndex).DPad.Right == ButtonState.Pressed)
                 {
                     directionBoolArray[3] = true;
                     isDirectionArrayEmpty = false;
                 }
             }
 
-            if (GamePad.GetState(playerIndex).ThumbSticks.Left.X != 0 && GamePad.GetState(playerIndex).ThumbSticks.Left.Y != 0)
+            if (actionFramesHeld > 0 && GamePad.GetState(playerIndex).IsButtonUp(Buttons.A) && Keyboard.GetState().IsKeyUp(Keys.Space))
             {
-                directionPressed = GamePad.GetState(playerIndex).ThumbSticks.Left * movementSpeed;
+                actionReleased = true;
+            }
+
+            if (GamePad.GetState(playerIndex).ThumbSticks.Left.X != 0 || GamePad.GetState(playerIndex).ThumbSticks.Left.Y != 0)
+            {
+                directionPressed.X = GamePad.GetState(playerIndex).ThumbSticks.Left.X * movementSpeed;
+                directionPressed.Y = -GamePad.GetState(playerIndex).ThumbSticks.Left.Y * movementSpeed;
             }
 
             oldPadState = GamePad.GetState(playerIndex);
@@ -183,110 +211,16 @@ namespace Batgai.Input
             {
                 event_directionPressed(directionPressed);
             }
+
+            if (actionReleased && event_actionReleased != null)
+            {
+                event_actionReleased();
+            }
+            if (actionFramesHeld > 0 && event_actionHeld != null)
+            {
+                event_actionHeld(actionFramesHeld);
+            }
             #endregion
         }
-
-        /*
-        #region oldInput
-        public GetInput()
-        {
-            playerIndex = PlayerIndex.One;
-        }
-
-        public GetInput(PlayerIndex index)
-        {
-            playerIndex = index;
-        }
-
-        public bool isKeyHit(Keys key)
-        {
-            KeyboardState newKeyState = Keyboard.GetState();
-
-            if (oldKeyState.IsKeyUp(key) && newKeyState.IsKeyDown(key))
-            {
-                oldKeyState = newKeyState;
-                return true;
-            }
-            else
-            {
-                oldKeyState = newKeyState;
-                return false;
-            }
-        }
-
-        public bool isButtonPressed(Buttons button)
-        {
-            GamePadState newPadState = GamePad.GetState(playerIndex);
-
-            if (oldPadState.IsButtonUp(button) && newPadState.IsButtonDown(button))
-            {
-                oldPadState = newPadState;
-                return true;
-            }
-            else
-            {
-                oldPadState = newPadState;
-                return false;
-            }
-        }
-
-        public bool isKeyReleased(Keys key)
-        {
-            KeyboardState newKeyState = Keyboard.GetState();
-
-            if (oldKeyState.IsKeyDown(key) && newKeyState.IsKeyUp(key))
-            {
-                oldKeyState = newKeyState;
-                return true;
-            }
-            else
-            {
-                oldKeyState = newKeyState;
-                return false;
-            }
-        }
-
-        public bool isButtonReleased(Buttons button)
-        {
-            GamePadState newPadState = GamePad.GetState(playerIndex);
-
-            if (oldPadState.IsButtonDown(button) && newPadState.IsButtonUp(button))
-            {
-                oldPadState = newPadState;
-                return true;
-            }
-            else
-            {
-                oldPadState = newPadState;
-                return false;
-            }
-        }
-
-        public bool isKeyHeld(Keys key)
-        {
-            KeyboardState keyState = Keyboard.GetState();
-
-            if (keyState.IsKeyDown(key))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool isButtonHeld(Buttons button)
-        {
-            GamePadState padState = GamePad.GetState(playerIndex);
-
-            if (padState.IsButtonDown(button))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        #endregion
-        */
     }
 }

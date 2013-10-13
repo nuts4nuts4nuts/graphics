@@ -35,6 +35,7 @@ namespace Batgai.GameManagement
 
         public Texture2D startScreen;
         public Texture2D heroSprites;
+        public Texture2D shotSprite;
         public Texture2D particleEffect;
 
         public SpriteFont verdana;
@@ -100,6 +101,7 @@ namespace Batgai.GameManagement
             startScreen = aContentManager.Load<Texture2D>("StartScreen");
             verdana = aContentManager.Load<SpriteFont>("Verdana");
             heroSprites = aContentManager.Load<Texture2D>("sonicSprites");
+            shotSprite = aContentManager.Load<Texture2D>("closedFist");
             segueUIMono = aContentManager.Load<SpriteFont>("Segoe UI Mono");
             particleEffect = aContentManager.Load<Texture2D>("particleEffect");
 

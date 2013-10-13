@@ -92,11 +92,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\AnimatedSprite.cs" />
+    <Compile Include="Entities\Body.cs" />
     <Compile Include="Entities\Camera.cs" />
     <Compile Include="Entities\FrameRateCounter.cs" />
     <Compile Include="Entities\Hero.cs" />
     <Compile Include="Entities\Particle.cs" />
     <Compile Include="Entities\ParticleEffect.cs" />
+    <Compile Include="Entities\Punchee.cs" />
+    <Compile Include="Entities\Shot.cs" />
     <Compile Include="Entities\Sprite.cs" />
     <Compile Include="GameManagement\GameManagement.cs" />
     <Compile Include="GameManagement\GameStates\EndState.cs" />

@@ -18,7 +18,7 @@ namespace Batgai.Entities
         public Vector2 mVelocity;
         public Vector2 mPosition;
 
-        public AnimatedSprite mySprite;
+        public AnimatedSprite mSprite;
 
         private int CelX = 220;
         private int CelY = 176;
@@ -37,30 +37,32 @@ namespace Batgai.Entities
         public Hero(Texture2D heroTexture)
         {
             init();
-            mySprite.setTexture(heroTexture);
+            mSprite.setTexture(heroTexture);
         }
 
         private void init()
         {
-            mySprite = new AnimatedSprite();
+            mSprite = new AnimatedSprite();
             input = new GetInput(PlayerIndex.One);
             attachEventListener();
 
-            mySprite.setSourceRect(new Rectangle(CelX, CelY, CelWidth, CelHeight));
+            mSprite.setSourceRect(new Rectangle(CelX, CelY, CelWidth, CelHeight));
 
-            mySprite.mCurrentCel = 0;
-            mySprite.mNumberOfCels = mCels;
-            mySprite.msUntilNextCel = 100;
-            mySprite.msPerCel = 100;
+            mSprite.mCurrentCel = 0;
+            mSprite.mNumberOfCels = mCels;
+            mSprite.msUntilNextCel = 100;
+            mSprite.msPerCel = 100;
 
-            mySprite.setScale(new Vector2(1.5f));
-            mPosition = new Vector2(640 - (mySprite.getSourceRect().Width / 2), 360 - (mySprite.getSourceRect().Height / 2));
+            mSprite.setScale(new Vector2(1.5f));
+            mSprite.setOrigin(new Vector2(mSprite.getSourceRect().Width / 2, mSprite.getSourceRect().Height / 2));
+            mPosition = new Vector2(640 - (mSprite.getSourceRect().Width / 2), 360 - (mSprite.getSourceRect().Height / 2));
             mVelocity = new Vector2(0);
         }
 
         private void attachEventListener()
         {
             input.event_directionPressed += new GetInput.directionPressDelegate(handleMovment);
+            input.event_actionHeld += new GetInput.buttonHeldDelegate(slowMovement);
         }
 
         public Vector2 getVelocity()
@@ -75,48 +77,42 @@ namespace Batgai.Entities
 
         public void draw(SpriteBatch spriteBatch)
         {
-            mySprite.draw(spriteBatch);
+            mSprite.draw(spriteBatch);
         }
 
         private void handleMovment(Vector2 value)
         {
-            mVelocity += value*4;
+            mVelocity += value*5;
+
+            mSprite.setRotation((float)Math.Atan2(value.Y, value.X) );
+
             if (mVelocity.X < 0)
             {
-                mySprite.setSpriteEffects(SpriteEffects.FlipHorizontally);
-
-                if(mySprite.getRotation() < 90 && mySprite.getRotation() > -90)
-                {
-                    mySprite.setRotation(value.Y*5);
-                }
+                mSprite.setSpriteEffects(SpriteEffects.FlipVertically);
             }
             else
             {
-                mySprite.setSpriteEffects(SpriteEffects.None);
-
-                if(mySprite.getRotation() < 90 && mySprite.getRotation() > -90)
-                {
-                    mySprite.setRotation(-value.Y*5);
-                }
+                mSprite.setSpriteEffects(SpriteEffects.None);
             }
+        }
+
+        private void slowMovement(int framesHeld)
+        {
+            mVelocity = new Vector2(mVelocity.X * 0.85f, mVelocity.Y * 0.85f);
         }
 
         public void update(GameTime gameTime)
         {
-            float MAX_VELO = 1280 / 3.0f;
+            input.update(gameTime);
 
             mVelocity *= 0.94f;
-            mVelocity.X = MathHelper.Clamp(mVelocity.X, -MAX_VELO, MAX_VELO);
-            mVelocity.Y = MathHelper.Clamp(mVelocity.Y, -MAX_VELO, MAX_VELO);
 
             mPosition.Y += (float)(mVelocity.Y * gameTime.ElapsedGameTime.TotalSeconds);
             mPosition.X += (float)(mVelocity.X * gameTime.ElapsedGameTime.TotalSeconds);
 
-            mySprite.setPosition(mPosition);
-            mySprite.setViewPosition(mySprite.getPosition());
+            mSprite.setPosition(mPosition);
 
-            mySprite.update(gameTime);
-            input.update(gameTime);
+            mSprite.update(gameTime);
         }
     }
 }

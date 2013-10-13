@@ -35,7 +35,7 @@ namespace Batgai.Entities
             mScale = new Vector2(1);
             mColor = Color.White;
             mViewPosition = mPosition;
-            mCurrentCelLocation = new Rectangle(0, 0, 50, 50);
+            mCurrentCelLocation = new Rectangle(0, 0, 32, 32);
         }
 
         public Sprite(Rectangle currentCelLocation, Vector2 position)
@@ -119,6 +119,11 @@ namespace Batgai.Entities
         public Vector2 getScale()
         {
             return mScale;
+        }
+
+        public SpriteEffects getSpriteEffects()
+        {
+            return mSpriteEffects;
         }
 
         public Rectangle getSourceRect()
