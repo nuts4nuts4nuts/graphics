@@ -14,13 +14,26 @@ namespace Batgai.Entities
 {
     public class Camera
     {
-        public Rectangle mDimensions;
-        public Vector2 mVelo;
+        protected float mZoom;
+        public Matrix mTransform;
+        public Vector2 mPos = Vector2.Zero;
+        protected float mRotation;
+        public Vector2 mViewport;
 
         public Camera()
         {
-            mDimensions = new Rectangle(640, 360, 1280, 720);
-            mVelo = new Vector2(0);
+            mViewport = new Vector2(0, 0);
+            mZoom = 1.0f;
+            mRotation = 0.0f;
         }
-    }
+
+        public Matrix getTransform(GraphicsDevice graphicsDevice)
+        {
+            mTransform = Matrix.CreateTranslation(new Vector3(-mPos.X, -mPos.Y, 0)) *
+                                            Matrix.CreateRotationZ(mRotation) *
+                                            Matrix.CreateScale(new Vector3(mZoom, mZoom, 1)) *
+                                            Matrix.CreateTranslation(new Vector3(0, 0, 0));
+            return mTransform;
+        }
+}
 }

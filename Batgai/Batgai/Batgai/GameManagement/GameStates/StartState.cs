@@ -17,7 +17,7 @@ namespace Batgai.GameManagement
     {
         private SpriteFont titleFont;
         private Sprite startScreen;
-        private string title = "Particles";
+        private string title = "Batgai-0 Sonic's Revenge";
 
         public StartState()
         {

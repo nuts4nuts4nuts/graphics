@@ -29,6 +29,7 @@ namespace Batgai
 
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight = 720;
+            graphics.IsFullScreen = true;
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Batgai
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            gameManager = new GameManager();
+            gameManager = new GameManager(graphics.GraphicsDevice);
 
             base.Initialize();
         }

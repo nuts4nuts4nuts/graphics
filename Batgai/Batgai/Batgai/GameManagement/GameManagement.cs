@@ -33,6 +33,8 @@ namespace Batgai.GameManagement
         private GameStateType mCurrentState;
         public GameLanguage mCurrentLang;
 
+        public GraphicsDevice mGraphicsDevice;
+
         public Texture2D startScreen;
         public Texture2D heroSprites;
         public Texture2D shotSprite;
@@ -41,8 +43,9 @@ namespace Batgai.GameManagement
         public SpriteFont verdana;
         public SpriteFont segueUIMono;
 
-        public GameManager()
+        public GameManager(GraphicsDevice graphics)
         {
+            mGraphicsDevice = graphics;
             mGameStates = new List<GameState>();
             mCurrentLang = GameLanguage.ENGLISH;
         }

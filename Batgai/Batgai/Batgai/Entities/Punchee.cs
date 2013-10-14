@@ -44,7 +44,7 @@ namespace Batgai.Entities
             if (collisionCD <= 0)
             {
                 mVelocity += collisionVect;
-                collisionCD = 30;
+                collisionCD = 60;
             }
         }
 

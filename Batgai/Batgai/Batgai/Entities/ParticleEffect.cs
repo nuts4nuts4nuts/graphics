@@ -36,10 +36,12 @@ namespace Batgai.Entities
         public int mBurstCountdownMS;
 
         public BlendState mBlendType;
+        Camera mCamera;
         public List<Particle> mParticles;
 
-        public ParticleEffect(Texture2D texture, ParticleType pType, BlendState blend)
+        public ParticleEffect(Texture2D texture, ParticleType pType, BlendState blend, Camera camera)
         {
+            mCamera = camera;
             mParticles = new List<Particle>();
             particleTexture = texture;
             m_pType = pType;
@@ -192,7 +194,7 @@ namespace Batgai.Entities
 
         public void draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.Texture, mBlendType);
+            spriteBatch.Begin(SpriteSortMode.Texture, mBlendType, null, null, null, null, mCamera.mTransform);
             foreach(Particle p in mParticles)
             {
                 p.draw(spriteBatch);

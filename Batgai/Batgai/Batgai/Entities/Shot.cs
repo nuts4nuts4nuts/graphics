@@ -14,13 +14,14 @@ namespace Batgai.Entities
 {
     class Shot
     {
-        public const float SPEED = 25;
+        public const float MAX_SPEED = 25;
         public Vector2 SHOT_DIMENSIONS = new Vector2(296, 216);
 
         public Sprite mSprite;
         public Vector2 mVelocity = new Vector2(0,0);
         public Vector2 mPosition = new Vector2(0,0);
         public float mForce;
+        public float speed;
         public Rectangle mCurrentRect = new Rectangle(0,0,0,0);
         public int framesAlive = 0;
 
@@ -38,8 +39,9 @@ namespace Batgai.Entities
             Color moreTrans = mSprite.getColor();
             moreTrans.A = 200;
             mSprite.setColor(moreTrans);
-            mVelocity = new Vector2((float)Math.Cos(mSprite.getRotation())*SPEED, (float)Math.Sin(mSprite.getRotation())*SPEED);
-            mForce = mSprite.getScale().X * (1.5f*(float)Math.Pow(10, 2));
+            speed = MAX_SPEED - 21 * mSprite.getScale().X;
+            mVelocity = new Vector2((float)Math.Cos(mSprite.getRotation())*speed, (float)Math.Sin(mSprite.getRotation())*speed);
+            mForce = (float)Math.Pow(10, mSprite.getScale().X*2.5f);//mSprite.getScale().X * (2f*(float)Math.Pow(10, 2));
         }
 
         public void draw(SpriteBatch spriteBatch)
