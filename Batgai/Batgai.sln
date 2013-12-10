@@ -5,12 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Batgai", "Batgai\Batgai\Bat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BatgaiContent", "Batgai\BatgaiContent\BatgaiContent.contentproj", "{4E10DCB6-9322-40E4-A348-C521D5EA9F92}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xTile", "xTile", "{6F370942-9920-4597-805D-B5A3C201CCFF}"
-	ProjectSection(SolutionItems) = preProject
-		Batgai\xTile\xTile.dll = Batgai\xTile\xTile.dll
-		Batgai\xTile\xTile.Pipeline.dll = Batgai\xTile\xTile.Pipeline.dll
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
