@@ -1,0 +1,3 @@
+Continue
+View Controls
+Quit

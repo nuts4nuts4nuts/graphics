@@ -1,0 +1,4 @@
+Movimiento: Tecla De Direccion / D-Pad
+Seleccionar / Saltar: Espaciador / A
+Respaldar: Escapar / B
+Pausa: Escapar / Start

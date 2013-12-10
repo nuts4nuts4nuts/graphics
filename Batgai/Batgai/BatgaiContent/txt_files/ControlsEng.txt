@@ -1,0 +1,4 @@
+Movement: Arrow Keys / D-Pad
+Select / Shoot: Space / A
+Back: Escape / B
+Pause: Escape / Start
